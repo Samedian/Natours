@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NatoursEntity\NatoursEntities.csproj" />
+    <ProjectReference Include="..\NatoursExceptions\NatoursExceptions.csproj" />
+    <ProjectReference Include="..\NatoursRepositoryLayer\NatoursRepositoryLayer.csproj" />
+    <ProjectReference Include="..\NatoursServiceLayer\NatoursServiceLayer.csproj" />
+  </ItemGroup>
+
+
+</Project>
