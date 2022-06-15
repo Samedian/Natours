@@ -12,6 +12,10 @@ namespace NatoursRepositoryLayer
         {
 
         }
+        public NatoursDbContext()
+        {
+
+        }
 
         public DbSet<Address> addresses { get; set; }
         public DbSet<Booking> bookings { get; set; }
