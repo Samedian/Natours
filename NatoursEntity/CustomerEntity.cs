@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace NatoursEntities
-{
+{    
     public class CustomerEntity
     {
         public int CustomerId { get; set; }
@@ -21,6 +21,8 @@ namespace NatoursEntities
         public int AddressId { get; set; }
 
         public AddressEntity address { get; set; }
+
+        public string JwtToken { get; set; }
 
     }
 }

@@ -12,7 +12,7 @@ namespace NatoursApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BookingController : ControllerBase
+    public class BookingController : ControllerBase                                                                                                                                                                
     {
         private readonly IBookingBusinessLayer _bookingBusinessLayer;
         public BookingController(IBookingBusinessLayer bookingBusinessLayer)

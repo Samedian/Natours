@@ -37,5 +37,8 @@ namespace NatoursRepositoryLayer.Model
         [ForeignKey("AddressId")]
         public Address address { get; set; }
 
+        [NotMapped]
+        public string JwtToken { get; set; }
+
     }
 }
