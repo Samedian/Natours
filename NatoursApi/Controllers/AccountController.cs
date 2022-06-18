@@ -21,38 +21,25 @@ namespace NatoursApi.Controllers
             this._authenticationService = authenticationService;
         }
 
-        // GET: api/<AccountController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
-        // GET api/<AccountController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        /// <summary>
+        /// This is used to Login 
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns></returns>
+        [HttpPost("Login")]
+        public async Task<CustomerEntity> Login(CustomerEntity customer)
         {
-            return "value";
-        }
-
-        // POST api/<AccountController>
-        [HttpPost]
-        public CustomerEntity Post([FromBody] CustomerEntity customer)
-        {
-            CustomerEntity user = _authenticationService.authenticate(customer.CustomerName, customer.PasswordHash);
+            CustomerEntity user = await _authenticationService.Login(customer);
             return user;
         }
 
-        // PUT api/<AccountController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost("Register")]
+        public async Task<CustomerEntity> Register(CustomerEntity customer)
         {
-        }
 
-        // DELETE api/<AccountController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            CustomerEntity user = await _authenticationService.Register(customer);
+            return user;
         }
     }
 }

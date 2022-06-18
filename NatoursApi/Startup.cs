@@ -95,9 +95,17 @@ namespace NatoursApi
                     ValidateAudience = false
                 };
             });
-            services.AddTransient<IAuthenticateService, AuthenticateService>();
 
             #endregion JWT Authentication
+            #region Dependency Injection
+
+            services.AddTransient<IBookingDataAccessLayer, BookingDataAccessLayer>();
+            services.AddTransient<IBookingService, BookingService>();
+            services.AddTransient<IAccountDataLayer, AccountDataLayer>();
+            services.AddTransient<IAuthenticateService, AuthenticateService>();
+
+            #endregion
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

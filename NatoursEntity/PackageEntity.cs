@@ -21,6 +21,7 @@ namespace NatoursEntities
         public int DifficultyId { get; set; }
 
         public DifficultyEntity difficultyEntity { get; set; }
+        public int PeopleBooked { get; set; }
 
     }
 }

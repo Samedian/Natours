@@ -4,13 +4,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NatoursRepositoryLayer
+namespace NatoursServiceLayer
 {
-    public interface IBookingDataAccessLayer
+    public interface IBookingService
     {
         Task<List<BookingEntity>> GetAllBookingDetails();
         Task<bool> BookPackageAdd(BookingEntity entity);
         Task<bool> BookPackageUpdate(BookingEntity entity);
-
     }
 }

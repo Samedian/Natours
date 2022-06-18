@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NatoursServiceLayer
 {
     public interface IAuthenticateService
     {
-       CustomerEntity authenticate(string user, string password);
+        Task<CustomerEntity> Login(CustomerEntity entity);
+        Task<CustomerEntity> Register(CustomerEntity entity);
     }
 }

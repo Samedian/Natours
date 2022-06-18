@@ -28,5 +28,10 @@ namespace NatoursRepositoryLayer.Model
         [Required]
         public int NumberOfPeople { get; set; }
 
+        public int StatusId { get; set; }
+
+        [ForeignKey("StatusId")]
+        public Status status { get; set; }
+
     }
 }

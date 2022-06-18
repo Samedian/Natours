@@ -1,11 +1,13 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NatoursEntities;
+using NatoursRepositoryLayer;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NatoursServiceLayer
 {
@@ -15,40 +17,55 @@ namespace NatoursServiceLayer
     public class AuthenticateService : IAuthenticateService
     {
         private readonly AppSetting _appSetting;
-        public AuthenticateService(IOptions<AppSetting> appSetting)
+        private readonly IAccountDataLayer _accountDataLayer;
+
+        public AuthenticateService(IOptions<AppSetting> appSetting,IAccountDataLayer accountDataLayer)
         {
             _appSetting = appSetting.Value;
+            _accountDataLayer = accountDataLayer;
         }
-        CustomerEntity customer = new CustomerEntity()
+        
+        public async Task<CustomerEntity> Login(CustomerEntity entity)
         {
-            CustomerName = "Nabin",
-            PasswordHash = "12345"
-        };
-
-        public CustomerEntity authenticate(string user, string password)
-        {
-            var userName = customer.CustomerName == user && customer.PasswordHash == password;
-            if (userName == false)
+            var data = await _accountDataLayer.Login(entity);
+            if (data == null)
             {
                 return null;
             }
 
+            GenerateToken(entity);
+
+            return entity;
+        }
+
+        public async Task<CustomerEntity> Register(CustomerEntity entity)
+        {
+            CustomerEntity customerEntity = await _accountDataLayer.Register(entity);
+            if (entity == null)
+                return null;
+
+            GenerateToken(entity);
+            return entity;
+
+        }
+
+        private void GenerateToken(CustomerEntity entity)
+        {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSetting.JwtTokenKey);
             var tokenDescription = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[] {
-                    new Claim(ClaimTypes.Name, user),
-                    new Claim(ClaimTypes.Role, "admin")
+                    new Claim(ClaimTypes.Name, entity.CustomerName),
+                    new Claim(ClaimTypes.Role, entity.RoleId==(int)Constants.RolesConstant.Admin?"Admin":"User")
                 }),
                 Expires = DateTime.UtcNow.AddDays(5),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescription);
-            customer.JwtToken = tokenHandler.WriteToken(token);
-            customer.PasswordHash = "";
-            return customer;
+            entity.JwtToken = tokenHandler.WriteToken(token);
+
         }
     }
 }

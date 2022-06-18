@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,6 +7,8 @@ using System.Text;
 
 namespace NatoursRepositoryLayer.Model
 {
+    [Index(nameof(CustomerName), IsUnique = true)]
+
     public class Customer
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,11 +22,19 @@ namespace NatoursRepositoryLayer.Model
 
         [MaxLength(50)]
         [Required]
-        public string PasswordHash { get; set; }
+        public string CustomerUserName { get; set; }
 
-        [MaxLength(100)]
+
+        [MaxLength(50)]
         [Required]
-        public string PasswordSalt { get; set; }
+        [NotMapped]
+        public string Password { get; set; }
+
+        [Required]
+        public byte[] PasswordHash { get; set; }
+
+        [Required]
+        public byte[] PasswordSalt { get; set; }
 
         [Required]
         public int RoleId { get; set; }

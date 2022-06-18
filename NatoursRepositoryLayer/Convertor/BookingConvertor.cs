@@ -14,9 +14,5 @@ namespace NatoursRepositoryLayer.Convertor
             CreateMap<Booking, BookingEntity>().ReverseMap();
         }        
 
-        internal T2 Map<T1, T2>(T1 getAllBookingDetails)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

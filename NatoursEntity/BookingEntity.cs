@@ -18,5 +18,10 @@ namespace NatoursEntities
 
         public int NumberOfPeople { get; set; }
 
+
+        public string StatusName { get; set; }
+
+        public StatusEntity statusEntity { get; set; }
+
     }
 }

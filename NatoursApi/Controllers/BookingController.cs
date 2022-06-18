@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NatoursEntities;
 using NatoursServiceLayer;
 using System;
@@ -14,44 +15,35 @@ namespace NatoursApi.Controllers
     [ApiController]
     public class BookingController : ControllerBase                                                                                                                                                                
     {
-        private readonly IBookingBusinessLayer _bookingBusinessLayer;
-        public BookingController(IBookingBusinessLayer bookingBusinessLayer)
+        private readonly IBookingService _bookingBusinessLayer;
+        public BookingController(IBookingService bookingBusinessLayer)
         {
             this._bookingBusinessLayer = bookingBusinessLayer;
         }
 
-        // GET: api/<BookingController>
-        [HttpGet]
-        public List<BookingEntity> Get()
+        [Authorize(Roles ="Admin")]
+        [HttpGet("GetAllBookingInfo")]
+        public async Task<List<BookingEntity>> GetAllBookings()
         {
-            List<BookingEntity> listOfAllBookingDetails = _bookingBusinessLayer.GetAllBookingDetails();
-
+            List<BookingEntity> listOfAllBookingDetails = await _bookingBusinessLayer.GetAllBookingDetails();
             return listOfAllBookingDetails;
         }
 
-        // GET api/<BookingController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [Authorize(Roles = "User")]
+        [HttpPost("InsertBooking")]
+        public async Task<bool> AddBooking(BookingEntity entity)
         {
-            return "value";
+            bool result = await _bookingBusinessLayer.BookPackageUpdate(entity);
+            return result;
         }
 
-        // POST api/<BookingController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [Authorize(Roles = "Admin")]
+        [HttpPut("UpdateBooking")]
+        public async Task<bool> UpdateBooking(BookingEntity entity)
         {
+            bool result = await _bookingBusinessLayer.BookPackageUpdate(entity);
+            return result;
         }
 
-        // PUT api/<BookingController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<BookingController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }
