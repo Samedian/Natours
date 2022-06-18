@@ -40,7 +40,8 @@ namespace NatoursRepositoryLayer.Model
         [ForeignKey("DifficultyId")]
         public Difficulty difficulty { get; set; }
 
-        [DefaultValue(0)]
+        //[DefaultValue(0)]
+        [NotMapped]
         public int PeopleBooked { get; set; }
     }
 }
