@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NatoursRepositoryLayer.Migrations
 {
-    public partial class Initials : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -72,7 +73,8 @@ namespace NatoursRepositoryLayer.Migrations
                     NumberOfGuides = table.Column<int>(type: "int", nullable: false),
                     MaxNumberOfPeople = table.Column<int>(type: "int", nullable: false),
                     ModeOfSleep = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    DifficultyId = table.Column<int>(type: "int", nullable: false)
+                    DifficultyId = table.Column<int>(type: "int", nullable: false),
+                    PeopleBooked = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -92,8 +94,9 @@ namespace NatoursRepositoryLayer.Migrations
                     CustomerId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    PasswordSalt = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    CustomerUserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false),
                     AddressId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -122,7 +125,8 @@ namespace NatoursRepositoryLayer.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
                     PackageId = table.Column<int>(type: "int", nullable: false),
-                    NumberOfPeople = table.Column<int>(type: "int", nullable: false)
+                    NumberOfPeople = table.Column<int>(type: "int", nullable: false),
+                    StatusId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -139,6 +143,12 @@ namespace NatoursRepositoryLayer.Migrations
                         principalTable: "packages",
                         principalColumn: "PackageId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_bookings_statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "statuses",
+                        principalColumn: "StatusId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -152,9 +162,20 @@ namespace NatoursRepositoryLayer.Migrations
                 column: "PackageId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_bookings_StatusId",
+                table: "bookings",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_customers_AddressId",
                 table: "customers",
                 column: "AddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_customers_CustomerName",
+                table: "customers",
+                column: "CustomerName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_customers_RoleId",
@@ -165,6 +186,24 @@ namespace NatoursRepositoryLayer.Migrations
                 name: "IX_packages_DifficultyId",
                 table: "packages",
                 column: "DifficultyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_packages_PackageName",
+                table: "packages",
+                column: "PackageName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_roles_RoleName",
+                table: "roles",
+                column: "RoleName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_statuses_StatusName",
+                table: "statuses",
+                column: "StatusName",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -173,13 +212,13 @@ namespace NatoursRepositoryLayer.Migrations
                 name: "bookings");
 
             migrationBuilder.DropTable(
-                name: "statuses");
-
-            migrationBuilder.DropTable(
                 name: "customers");
 
             migrationBuilder.DropTable(
                 name: "packages");
+
+            migrationBuilder.DropTable(
+                name: "statuses");
 
             migrationBuilder.DropTable(
                 name: "addresses");
