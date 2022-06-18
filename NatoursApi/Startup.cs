@@ -103,6 +103,8 @@ namespace NatoursApi
             services.AddTransient<IBookingService, BookingService>();
             services.AddTransient<IAccountDataLayer, AccountDataLayer>();
             services.AddTransient<IAuthenticateService, AuthenticateService>();
+            services.AddTransient<IPackageDataLayer, PackageDataLayer>();
+            services.AddTransient<IPackageServiceLayer, PackageServiceLayer>();
 
             #endregion
 

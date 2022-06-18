@@ -40,17 +40,15 @@ namespace NatoursRepositoryLayer
             try
             {
                 List<Booking> getAllBookingDetails = _dbcontext.bookings.ToList<Booking>();
-                var data = getAllBookingDetails.FirstOrDefault(x => x.CustomerId == entity.CustomerId && x.PackageId == entity.PackageId && x.StatusId==(int)Constants.StatusConstant.InProgress);
+                var data = getAllBookingDetails.FirstOrDefault(x => x.CustomerId == entity.CustomerId && x.PackageId == entity.PackageId &&
+                ( x.StatusId==(int)Constants.StatusConstant.InProgress || x.StatusId == (int)Constants.StatusConstant.Approved));
 
                 if (data != null)
-                    throw new PackageAlreadyBooked("Please wait Your request is in Progress");
+                    throw new PackageAlreadyBooked("Please wait Your request is in Progress or not Completed");
 
                 Booking booking = _mapper.Map<Booking>(data);
-                using (var context = _dbcontext)
-                {
-                    await context.bookings.AddAsync(booking);
-                    await context.SaveChangesAsync();
-                }
+                await _dbcontext.bookings.AddAsync(booking);
+                await _dbcontext.SaveChangesAsync();
                 
             }
             catch(PackageAlreadyBooked ex)
@@ -74,11 +72,8 @@ namespace NatoursRepositoryLayer
                     throw new PackageNotFound("Package Not Found for this Customer");
 
                 Booking booking = _mapper.Map<Booking>(data);
-                using (var context = _dbcontext)
-                {
-                    context.bookings.Update(booking);
-                    await context.SaveChangesAsync();
-                }
+                _dbcontext.bookings.Update(booking);
+                await _dbcontext.SaveChangesAsync();
 
             }
             catch (PackageNotFound ex)

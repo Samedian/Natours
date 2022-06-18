@@ -31,15 +31,13 @@ namespace NatoursRepositoryLayer
                 var data = _mapper.Map<Customer>(entity);
 
                 //Password
-                using var hmac = new HMACSHA512();
+                var hmac = new HMACSHA512();
                 data.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(entity.Password));
                 data.PasswordSalt = hmac.Key;
 
-                using (var context = _dbcontext)
-                {
-                    await context.customers.AddAsync(data);
-                    await context.SaveChangesAsync();
-                }
+                await _dbcontext.customers.AddAsync(data);
+                await _dbcontext.SaveChangesAsync();
+
                 var result = _mapper.Map<CustomerEntity>(data);
                 result.Password = null;
                 result.PasswordHash = null;
@@ -68,7 +66,7 @@ namespace NatoursRepositoryLayer
                 var data = _mapper.Map<Customer>(entity);
 
                 //Password
-                using var hmac = new HMACSHA512(data.PasswordSalt);
+                var hmac = new HMACSHA512(data.PasswordSalt);
 
                 var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(entity.Password));
 

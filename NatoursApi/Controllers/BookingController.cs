@@ -29,7 +29,7 @@ namespace NatoursApi.Controllers
             return listOfAllBookingDetails;
         }
 
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "User,Admin")]
         [HttpPost("InsertBooking")]
         public async Task<bool> AddBooking(BookingEntity entity)
         {
