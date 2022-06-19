@@ -33,19 +33,19 @@ namespace NatoursServiceLayer
                 return null;
             }
 
-            GenerateToken(entity);
+            GenerateToken(data);
 
-            return entity;
+            return data;
         }
 
         public async Task<CustomerEntity> Register(CustomerEntity entity)
         {
             CustomerEntity customerEntity = await _accountDataLayer.Register(entity);
-            if (entity == null)
+            if (customerEntity == null)
                 return null;
 
-            GenerateToken(entity);
-            return entity;
+            GenerateToken(customerEntity);
+            return customerEntity;
 
         }
 

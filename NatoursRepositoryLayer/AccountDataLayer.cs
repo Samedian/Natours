@@ -28,13 +28,19 @@ namespace NatoursRepositoryLayer
 
                 if (customer != null)
                     throw new UserAlreadyExist("User Already Exist");
-                var data = _mapper.Map<Customer>(entity);
+                Customer data = _mapper.Map<Customer>(entity);
 
                 //Password
                 var hmac = new HMACSHA512();
                 data.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(entity.Password));
                 data.PasswordSalt = hmac.Key;
 
+                //Save Address
+                await _dbcontext.addresses.AddAsync(data.address);
+                await _dbcontext.SaveChangesAsync();
+
+                //Save Customer Info
+                data.AddressId = data.address.AddressId;
                 await _dbcontext.customers.AddAsync(data);
                 await _dbcontext.SaveChangesAsync();
 

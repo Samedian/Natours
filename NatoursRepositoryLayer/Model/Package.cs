@@ -43,5 +43,8 @@ namespace NatoursRepositoryLayer.Model
         //[DefaultValue(0)]
         [NotMapped]
         public int PeopleBooked { get; set; }
+
+        [DefaultValue(0)]
+        public double Cost { get; set; }
     }
 }

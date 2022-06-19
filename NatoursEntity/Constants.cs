@@ -8,20 +8,20 @@ namespace NatoursEntities
     {
         public enum RolesConstant
         {
-            Admin,
+            Admin=1,
             User
         }
 
         public enum DifficultyConstant
         {
-            Easy,
+            Easy=1,
             Medium,
             Hard
         }
 
         public enum StatusConstant
         {
-            InProgress,
+            InProgress=1,
             Approved,
             Rejected,
             Cancelled,
