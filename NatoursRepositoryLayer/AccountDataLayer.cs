@@ -68,23 +68,22 @@ namespace NatoursRepositoryLayer
                 Customer customer = _dbcontext.customers.FirstOrDefault(x => x.CustomerUserName == entity.CustomerUserName);
 
                 if (customer == null)
-                    throw new UserNotFound("User Not Found");
-                var data = _mapper.Map<Customer>(entity);
+                    throw new UserNotFound("User Not Found");              
 
                 //Password
-                var hmac = new HMACSHA512(data.PasswordSalt);
+                var hmac = new HMACSHA512(customer.PasswordSalt);
 
                 var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(entity.Password));
 
                 for (int i = 0; i < computedHash.Length; i++)
                 {
-                    if (computedHash[i] != data.PasswordHash[i])
+                    if (computedHash[i] != customer.PasswordHash[i])
                     {
                         throw new UnAuthorized("Inavlid Password");
                     }
                 }
 
-                var result = _mapper.Map<CustomerEntity>(data);
+                var result = _mapper.Map<CustomerEntity>(customer);
                 result.Password = null;
                 result.PasswordHash = null;
                 result.PasswordSalt = null;

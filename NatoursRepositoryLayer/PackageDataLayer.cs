@@ -30,8 +30,8 @@ namespace NatoursRepositoryLayer
             Package package = _mapper.Map<Package>(packageEntity);
             try
             {
-                 _dbcontext.Entry(package).State = EntityState.Modified;
-                await _dbcontext.SaveChangesAsync();
+                _dbcontext.Entry(await _dbcontext.packages.FirstOrDefaultAsync(x => x.PackageId == packageEntity.PackageId)).CurrentValues.SetValues(package);
+                await _dbcontext.SaveChangesAsync();                
 
             }
             catch (Exception ex)
@@ -48,22 +48,21 @@ namespace NatoursRepositoryLayer
         /// <returns></returns>
         public async Task<List<PackageEntity>> GetPackage()
         {
-            List<PackageEntity> packageEntities = null;
+            List<PackageEntity> packageEntities = new List<PackageEntity>();
             List<Package> packages = null;
 
             try
             {
-                packages = _dbcontext.packages.ToList();
-                await _dbcontext.SaveChangesAsync();
+                packages = _dbcontext.packages.ToList();                
             }
             catch (Exception ex)
             {
                 return null;
             }
 
-            foreach (var data in packages)
+            foreach (var package in packages)
             {
-                PackageEntity packageEntity = _mapper.Map<PackageEntity>(packages);
+                PackageEntity packageEntity = _mapper.Map<PackageEntity>(package);
                 packageEntities.Add(packageEntity);
             }
             return packageEntities;

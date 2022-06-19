@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NatoursEntities;
 using NatoursExceptions;
 using NatoursRepositoryLayer.Convertor;
@@ -29,7 +30,7 @@ namespace NatoursRepositoryLayer
             foreach (var item in getAllBookingDetails)
             {
                 bookingEntity = new BookingEntity();
-                bookingEntity=  _mapper.Map<BookingEntity>(getAllBookingDetails);
+                bookingEntity=  _mapper.Map<BookingEntity>(item);
                 bookingEntities.Add(bookingEntity);
             }
             return bookingEntities;
@@ -46,7 +47,7 @@ namespace NatoursRepositoryLayer
                 if (data != null)
                     throw new PackageAlreadyBooked("Please wait Your request is in Progress or not Completed");
 
-                Booking booking = _mapper.Map<Booking>(data);
+                Booking booking = _mapper.Map<Booking>(entity);
                 await _dbcontext.bookings.AddAsync(booking);
                 await _dbcontext.SaveChangesAsync();
                 
@@ -71,8 +72,8 @@ namespace NatoursRepositoryLayer
                 if (data == null)
                     throw new PackageNotFound("Package Not Found for this Customer");
 
-                Booking booking = _mapper.Map<Booking>(data);
-                _dbcontext.bookings.Update(booking);
+                Booking booking = _mapper.Map<Booking>(entity);
+                _dbcontext.Entry(await _dbcontext.bookings.FirstOrDefaultAsync(x => x.BookingId == entity.BookingId)).CurrentValues.SetValues(booking);               
                 await _dbcontext.SaveChangesAsync();
 
             }

@@ -33,7 +33,7 @@ namespace NatoursApi.Controllers
         [HttpPost("InsertBooking")]
         public async Task<bool> AddBooking(BookingEntity entity)
         {
-            bool result = await _bookingBusinessLayer.BookPackageUpdate(entity);
+            bool result = await _bookingBusinessLayer.BookPackageAdd(entity);
             return result;
         }
 
