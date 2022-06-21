@@ -75,6 +75,7 @@ namespace NatoursApi
                 options.UseSqlServer(Configuration.GetConnectionString("Default"));
             });
             services.AddControllers();
+            services.AddCors();
 
             #region JWT Authentication
             //To read all AppSetting data
@@ -129,6 +130,7 @@ namespace NatoursApi
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
@@ -136,6 +138,9 @@ namespace NatoursApi
             });
             app.UseSwagger();
             app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/Swagger.jsoob", "Welcome"));
+
+            // To grant access to third party application like angular
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
         }
     }
 }
